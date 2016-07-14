@@ -1,0 +1,10 @@
+python_tests(name='test_util',
+  dependencies=[
+    '3rdparty/python:mock',
+    '3rdparty/python:PyYAML',
+    '3rdparty/python:termcolor',
+    '3rdparty/python:twitter.common.contextutil',
+    'src/python/util',
+  ],
+  sources=rglobs('*.py'),
+)
