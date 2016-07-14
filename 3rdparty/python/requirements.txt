@@ -1,4 +1,7 @@
+mock==2.0.0
 PyYAML==3.11
 twitter.common.app==0.3.5
+twitter.common.contextutil==0.3.5
+twitter.common.log==0.3.5
 termcolor==1.1.0
 
