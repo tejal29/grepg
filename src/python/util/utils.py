@@ -11,7 +11,11 @@ def user_dir():
 
 
 def get_user_name(user_opt):
- return user_opt if user_opt else get_config('user')
+ user_name = user_opt if user_opt else get_config('user')
+ if user_name:
+   return user_name
+ else:
+   raise Exception('Either username should be specified as --user on command line or in the {0}/grepg.yml'.format(user_dir()))
 
 def get_config(key_name, default=None):
   home = user_dir()
@@ -24,6 +28,7 @@ def get_config(key_name, default=None):
           return yaml_dict[key_name]
       except Exception as e:
         raise e
+  return default
 
 
 def print_util(string, color, colorize):
@@ -40,6 +45,15 @@ def since_time_in_words(time_in_seconds):
   elif detla.hour:
     return '{0} hour(s)'.format(detla.hour)
   elif detla.minute:
-    return '{0} min(s)'.format(detla.minute)
+    return '{0} minute(s)'.format(detla.minute)
   else:
     return '{0} second(s)'.format(detla.second)
+
+
+def match(query_str, string, match_op):
+  query = set([word.lower() for word in query_str.split()])
+  document_words =  set([word.lower() for word in string.split()])
+  if match_op == "or":
+    return query & document_words
+  else:
+    return query.issubset(document_words)

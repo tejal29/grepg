@@ -9,7 +9,7 @@ from mock import patch
 from twitter.common.contextutil import temporary_dir
 import yaml
 
-from util.utils import get_user_name, print_util
+from util.utils import *
 
 class UtilsTest(unittest.TestCase):
 
@@ -60,3 +60,9 @@ class UtilsTest(unittest.TestCase):
     with self.test_utils("'user1': 'from_file'"):
       with self.assertRaises(Exception) as e:
         get_user_name(None)
+
+  def test_since_time_in_words(self):
+    self.assertEqual(since_time_in_words(86461), "1 day(s)")
+    self.assertEqual(since_time_in_words(7500), "2 hour(s)")
+    self.assertEqual(since_time_in_words(320), "5 minute(s)")
+    self.assertEqual(since_time_in_words(50), "50 second(s)")
