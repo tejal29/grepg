@@ -111,7 +111,7 @@ User: tejal29, Topic: python, Last fetched: 5 second(s) ago
 
 #Advanced usage
 `grepg -s` does a simple 'or' on the search term specified on command line and cheat descriptions. In order to get finer results, you can change the `match_op` to 'and'
-You can do that on command line via `--match-op`. The below command gives one macth result instead of 2 shown in [#Search for a specific string].
+You can do that on command line via `--match-op`. The below command gives one macth result instead of 2 shown in #search-for-a-specific-string.
 
 ```
 $ grepg -u tejal29 -t scala -s 'case class' --match-op and
