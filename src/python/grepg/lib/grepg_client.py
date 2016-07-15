@@ -1,8 +1,8 @@
 from __future__ import print_function
 
-from util.utils import match, print_util, since_time_in_words
-from lib.cheat_sheets_cache import CheatSheetsCache
-from lib.grepg_api import GrepgAPI
+from grepg.lib.cheat_sheets_cache import CheatSheetsCache
+from grepg.lib.grepg_api import GrepgAPI
+from grepg.util.utils import match, print_util, since_time_in_words
 
 from twitter.common import log
 

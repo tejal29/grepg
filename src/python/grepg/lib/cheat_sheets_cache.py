@@ -1,8 +1,8 @@
 import os
 import pickle
 
-from lib.cheat_sheets_model import *
-from util.utils import user_dir
+from grepg.lib.cheat_sheets_model import *
+from grepg.util.utils import user_dir
 
 
 class CheatSheetsCache(object):

@@ -9,7 +9,7 @@ grepg
 To install `grepg` run
 
 ```
-TBD
+pip install grepg
 ```
 
 #Requirements
@@ -110,8 +110,8 @@ User: tejal29, Topic: python, Last fetched: 5 second(s) ago
 ```
 
 #Advanced usage
-`grepg -s` does a simple 'or' on the search term specified on command line and cheat descriptions. In order to get finer results, you can change the `match_op` to 'and'
-You can do that on command line via `--match-op`. The below command gives one macth result instead of 2 shown in [Search for a specific string](#search-for-a-specific-string).
+`grepg -s` does a simply does an 'or' when multiple search terms specified on command line and cheat descriptions. In order to get finer results, you can change the `match_op` to 'and'
+You can do that on command line via `--match-op`. The below command gives one match result instead of 2 shown in [Search for a specific string](#search-for-a-specific-string).
 
 ```
 $ grepg -u tejal29 -t scala -s 'case class' --match-op and
@@ -120,7 +120,7 @@ Case class example
 case class Person(firstName: String, lastName:String)
 
 ```
-You can also sepcify the default `match_op` in `~/.grepg.yml`
+You can also specify the default `match_op` in `~/.grepg.yml`
 ```
 user: tejal29
 match_op: and
@@ -129,10 +129,13 @@ match_op: and
 #Development
 To run grepg client in dev mode,
 ```
-./pants run  src/python:bin -- -u tejal29 -t scala -s 'class case'
+./pants run src/python/grepg:bin -- -u tejal29 -t scala -s 'class case'
 ```
 To execute tests run
-```./pants test tests/python::```.
+```./pants test tests/python/grepg::```
 
 #License
 grepg is under the [MIT License](http://www.opensource.org/licenses/MIT).
+
+#Related Projects
+Ruby client for grepg https://github.com/evidanary/grepg

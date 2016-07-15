@@ -2,14 +2,12 @@ from __future__ import print_function
 
 from contextlib import contextmanager
 import os
-from textwrap import dedent
 import unittest
 
 from mock import patch
 from twitter.common.contextutil import temporary_dir
-import yaml
 
-from util.utils import *
+from grepg.util.utils import *
 
 class UtilsTest(unittest.TestCase):
 
