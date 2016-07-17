@@ -3,6 +3,6 @@ python_library(name='lib',
   dependencies=[
     '3rdparty/python:twitter.common.app',
     '3rdparty/python:twitter.common.log',
-    'src/python/util',
+    'src/python/grepg/util',
   ]
 )
