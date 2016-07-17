@@ -15,11 +15,11 @@ def get_user_name(user_opt):
  if user_name:
    return user_name
  else:
-   raise Exception('Either username should be specified as --user on command line or in the {0}/grepg.yml'.format(user_dir()))
+   raise Exception('Either username should be specified as --user on command line or in the {0}/.grepg.yml'.format(user_dir()))
 
 def get_config(key_name, default=None):
   home = user_dir()
-  user_settings_file = os.path.join(home, 'grepg.yml')
+  user_settings_file = os.path.join(home, '.grepg.yml')
   if os.path.exists(user_settings_file):
     with open(user_settings_file) as user_config_file:
       try:
