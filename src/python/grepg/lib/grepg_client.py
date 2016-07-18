@@ -42,8 +42,9 @@ class GrepgClient(object):
 
   def _get_user_topic_cheats(self):
     (_, topics) = self._get_user_topics()
+    topic_cheats = {}
     for topic in topics.values():
-      if topic.topic_name.lower() == self.topic.lower():
+      if match(topic.topic_name, self.topic, self.match_op):
         with CheatSheetsCache(self.ttl) as cs:
           if self.force or topic.is_expired(self.ttl) or not topic.cheats:
             log.debug('Fetching user topic cheats from server')
@@ -51,15 +52,19 @@ class GrepgClient(object):
                                               topic.topic_id,
                                               topic.topic_name,
                                               self.api.user_topic_cheats(self.user_name, topic.topic_id))
-        return cs.get_user_topic_cheat(self.user_name, topic.topic_id)
+        topic_cheats[topic.topic_name] = cs.get_user_topic_cheat(self.user_name, topic.topic_id)
+    if topic_cheats:
+      return topic_cheats
     self.get_user_topics(False)
     raise CommandError('Topic {0} not found'.format(self.topic))
 
   def list_user_topic_cheats(self):
-    (since_timestamp, topic_cheats) = self._get_user_topic_cheats()
-    print_util('User: {0}, Topic: {1}, Last Fetched: {2} ago'.format(self.user_name, self.topic, since_time_in_words(since_timestamp)),
+    topic_cheats = self._get_user_topic_cheats()
+    for topic in topic_cheats:
+      (since_timestamp, cheats) = topic_cheats[topic]
+      print_util('User: {0}, Topic: {1}, Last Fetched: {2} ago'.format(self.user_name, topic, since_time_in_words(since_timestamp)),
                'green', self.colorize)
-    self.print_cheats(topic_cheats)
+      self.print_cheats(cheats)
 
   def print_cheats(self, topic_cheats):
     for cheat in topic_cheats:
@@ -67,13 +72,16 @@ class GrepgClient(object):
       print(cheat.command, "\n")
 
   def search_user_topic_cheats(self):
-    (since_timestamp, user_topic_cheats) = self._get_user_topic_cheats()
-    print_util('User: {0}, Topic: {1}, Search-Term: {2}, Last fetched: {3} ago'
-       .format(self.user_name, self.topic, self.search_term, since_time_in_words(since_timestamp)),
-      'green', self.colorize)
-
-    search_results = filter(lambda topic_cheat: match(self.search_term, topic_cheat.description, self.match_op), user_topic_cheats)
-    if search_results:
-      self.print_cheats(search_results)
-    else:
+    found = False
+    user_topic_cheats = self._get_user_topic_cheats()
+    for topic in user_topic_cheats:
+      (since_timestamp, cheats) = user_topic_cheats[topic]
+      search_results = filter(lambda topic_cheat: match(self.search_term, topic_cheat.description, self.match_op), cheats)
+      if search_results:
+        print_util('User: {0}, Topic: {1}, Search-Term: {2}, Last fetched: {3} ago'
+                   .format(self.user_name, topic, self.search_term, since_time_in_words(since_timestamp)),
+                   'green', self.colorize)
+        self.print_cheats(search_results)
+        found = True
+    if not found:
       raise CommandError("No results for search-term '{0}' and Topic {1}".format(self.search_term, self.topic))
