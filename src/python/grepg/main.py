@@ -17,7 +17,14 @@ def main(args, options):
     LogOptions.set_stderr_log_level('google:DEBUG')
 
   username = get_user_name(options.user)
+
+  if options.colorize and not options.no_colorize:
+    print("Cannot have both --colorize and --no-colorize on command line")
+    exit(1)
+
   colorize = options.colorize or get_config('colorize', default=False)
+  if not options.no_colorize:
+    colorize = False
   ttl = get_config('ttl_in_seconds', default=TTL)
   match_op = options.match_op or get_config('match_op', default="or")
   if not match_op in ["and", "or"]:
@@ -64,6 +71,7 @@ def add_options(app_obj):
   app_obj.add_option("-t", "--topic", type="string", help="topic")
   app_obj.add_option("-s", "--search", type="string", help="text to search")
   app_obj.add_option("-c", "--colorize", action="store_true", help="colorize output")
+  app_obj.add_option("-n", "--no-colorize", default= True, action="store_false", help="no colorize output")
   app_obj.add_option("-b", "--base-url", type="string", help=SUPPRESS_HELP)
   app_obj.add_option("-a", "--access_token", type="string", help=SUPPRESS_HELP)
   app_obj.add_option("-m", "--match-op", type="string", help=SUPPRESS_HELP)

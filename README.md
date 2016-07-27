@@ -9,7 +9,7 @@ grepg
 To install `grepg` run
 
 ```
-pip install grepg
+sudo pip install grepg
 ```
 
 #Requirements
@@ -134,6 +134,23 @@ To run grepg client in dev mode,
 To execute tests run
 ```./pants test tests/python/grepg::```
 
+
+# Installing grepg locally
+First run pants goal setup_py
+```
+./pants setup-py src/python/grepg:grepg-packaged
+```
+This should place a dist/grepg-<version>.tar.gz in your workspace.
+Unzip the tar
+```
+cd dist && tar -xvf grepg-<version>.tar.gz
+```
+Finally install the local package
+```
+cd grepg-<version>
+pip install -e .
+```
+Now install grep locally from this zip.
 #License
 grepg is under the [MIT License](http://www.opensource.org/licenses/MIT).
 

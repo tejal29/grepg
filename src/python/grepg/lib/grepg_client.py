@@ -76,7 +76,9 @@ class GrepgClient(object):
     user_topic_cheats = self._get_user_topic_cheats()
     for topic in user_topic_cheats:
       (since_timestamp, cheats) = user_topic_cheats[topic]
-      search_results = filter(lambda topic_cheat: match(self.search_term, topic_cheat.description, self.match_op), cheats)
+      search_results = filter(lambda topic_cheat: (match(self.search_term, topic_cheat.description, self.match_op) or
+                                                   match(self.search_term, topic_cheat.command, self.match_op)),
+                              cheats)
       if search_results:
         print_util('User: {0}, Topic: {1}, Search-Term: {2}, Last fetched: {3} ago'
                    .format(self.user_name, topic, self.search_term, since_time_in_words(since_timestamp)),
