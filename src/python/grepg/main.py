@@ -27,8 +27,8 @@ def main(args, options):
     colorize = False
   ttl = get_config('ttl_in_seconds', default=TTL)
   match_op = options.match_op or get_config('match_op', default="or")
-  if not match_op in ["and", "or"]:
-    print_util("Invalid match operator '{0}'. Can only be ['and', 'or']".format(match_op), 'red', colorize)
+  if not match_op.upper() in ["AND", "OR"]:
+    print_util("Invalid match operator '{0}'. Can only be ['AND', 'OR']".format(match_op), 'red', colorize)
     exit(1)
   grepg_client = GrepgClient(username=username,
                             topic=options.topic,
@@ -74,4 +74,4 @@ def add_options(app_obj):
   app_obj.add_option("-n", "--no-colorize", default= True, action="store_false", help="no colorize output")
   app_obj.add_option("-b", "--base-url", type="string", help=SUPPRESS_HELP)
   app_obj.add_option("-a", "--access_token", type="string", help=SUPPRESS_HELP)
-  app_obj.add_option("-m", "--match-op", type="string", help=SUPPRESS_HELP)
+  app_obj.add_option("-m", "--match-op", type="string", help="Match operator to match multiple search token. One of:  'And', 'Or'")
