@@ -7,7 +7,7 @@ from twitter.common import app, log
 from twitter.common.app.application import Application as App
 from twitter.common.log.options import LogOptions
 from grepg.lib.grepg_client import CommandError, GrepgClient
-from grepg.util.utils import get_config, get_user_name, print_util
+from grepg.util.utils import get_config, get_user_name, log_query, print_util
 
 TTL = 10  # 10 s
 
@@ -23,6 +23,7 @@ def main(args, options):
     exit(1)
 
   colorize = options.colorize or get_config('colorize', default=False)
+  log_queries = options.log_queries_dir or get_config('log_queries_dir', default=None)
   if not options.no_colorize:
     colorize = False
   ttl = get_config('ttl_in_seconds', default=TTL)
@@ -41,12 +42,14 @@ def main(args, options):
                             access_token=options.access_token)
   try:
     if options.search:
-      grepg_client.search_user_topic_cheats()
+      count = grepg_client.search_user_topic_cheats()
     elif options.topic:
-      grepg_client.list_user_topic_cheats()
+      count = grepg_client.list_user_topic_cheats()
     else:
-      grepg_client.get_user_topics()
+      count = grepg_client.get_user_topics()
+    log_query(log_queries, options.topic, options.search, count)
   except CommandError as e:
+    log_query(log_queries, options.topic, options.search, 0)
     print_util(e.message, 'red', colorize)
     exit(1)
 
@@ -75,3 +78,4 @@ def add_options(app_obj):
   app_obj.add_option("-b", "--base-url", type="string", help=SUPPRESS_HELP)
   app_obj.add_option("-a", "--access_token", type="string", help=SUPPRESS_HELP)
   app_obj.add_option("-m", "--match-op", type="string", help="Match operator to match multiple search token. One of:  'And', 'Or'")
+  app_obj.add_option("-l", "--log-queries-dir", type="string", help="Directory where you want all the queries to be written")

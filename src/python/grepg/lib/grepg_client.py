@@ -39,6 +39,7 @@ class GrepgClient(object):
     print_util("Available Topics =>", 'green', self.colorize)
     topics = [topic.topic_name for topic in topic_map.values()]
     print_util('\t'.join(topics), 'blue', self.colorize)
+    return len(topics)
 
   def _get_user_topic_cheats(self):
     (_, topics) = self._get_user_topics()
@@ -60,11 +61,14 @@ class GrepgClient(object):
 
   def list_user_topic_cheats(self):
     topic_cheats = self._get_user_topic_cheats()
+    count = 0
     for topic in topic_cheats:
       (since_timestamp, cheats) = topic_cheats[topic]
       print_util('User: {0}, Topic: {1}, Last Fetched: {2} ago'.format(self.user_name, topic, since_time_in_words(since_timestamp)),
                'green', self.colorize)
       self.print_cheats(cheats)
+      count = count + len(cheats)
+    return count
 
   def print_cheats(self, topic_cheats):
     for cheat in topic_cheats:
@@ -72,7 +76,7 @@ class GrepgClient(object):
       print(cheat.command, "\n")
 
   def search_user_topic_cheats(self):
-    found = False
+    count = 0
     user_topic_cheats = self._get_user_topic_cheats()
     for topic in user_topic_cheats:
       (since_timestamp, cheats) = user_topic_cheats[topic]
@@ -84,6 +88,7 @@ class GrepgClient(object):
                    .format(self.user_name, topic, self.search_term, since_time_in_words(since_timestamp)),
                    'green', self.colorize)
         self.print_cheats(search_results)
-        found = True
-    if not found:
+        count = count + len(search_results)
+    if not count:
       raise CommandError("No results for search-term '{0}' and Topic {1}".format(self.search_term, self.topic))
+    return count
