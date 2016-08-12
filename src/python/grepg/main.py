@@ -23,7 +23,7 @@ def main(args, options):
     exit(1)
 
   colorize = options.colorize or get_config('colorize', default=False)
-  log_queries = options.log_queries_dir or get_config('log_queries_dir', default=None)
+  log_queries_dir = options.log_queries_dir or get_config('log_queries_dir', default=None)
   if not options.no_colorize:
     colorize = False
   ttl = get_config('ttl_in_seconds', default=TTL)
@@ -47,9 +47,9 @@ def main(args, options):
       count = grepg_client.list_user_topic_cheats()
     else:
       count = grepg_client.get_user_topics()
-    log_query(log_queries, options.topic, options.search, count)
+    log_query(log_queries_dir, username, options.topic, options.search, count)
   except CommandError as e:
-    log_query(log_queries, options.topic, options.search, 0)
+    log_query(log_queries_dir, username, options.topic, options.search, 0)
     print_util(e.message, 'red', colorize)
     exit(1)
 

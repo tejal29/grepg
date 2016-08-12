@@ -71,7 +71,9 @@ def match(query_str, string, match_op):
         return found
     return True
 
-def log_query(dir, topic, search_str, count):
+def log_query(dir, user, topic, search_str, count):
+  if not dir:
+    return
   current_date_iso = datetime.utcnow().isoformat() + 'Z'
   with safe_open(os.path.join(dir, 'grepg.log'), 'a') as fp:
-    fp.write("{0}\t{1}\t{2}\t{3}\n".format(current_date_iso, topic, search_str, count))
+    fp.write("{0}\t{1}\t{2}\t{3}\t{4}\n".format(current_date_iso, user, topic, search_str, count))
