@@ -64,3 +64,10 @@ class UtilsTest(unittest.TestCase):
     self.assertEqual(since_time_in_words(7500), "2 hour(s)")
     self.assertEqual(since_time_in_words(320), "5 minute(s)")
     self.assertEqual(since_time_in_words(50), "50 second(s)")
+
+  def test_match(self):
+    self.assertTrue(match("for loop", "in.for", "or"))
+    self.assertFalse(match("for loop", "in.for", "and"))
+    self.assertTrue(match("map for", "object.for.map", "and"))
+    self.assertFalse(match("map for", "object.map", "and"))
+

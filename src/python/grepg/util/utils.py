@@ -6,6 +6,8 @@ import yaml
 
 from termcolor import cprint
 
+from twitter.common.dirutil import safe_open
+
 def user_dir():
   return os.path.expanduser("~")
 
@@ -51,9 +53,27 @@ def since_time_in_words(time_in_seconds):
 
 
 def match(query_str, string, match_op):
-  query = set([word.lower() for word in query_str.split()])
+  query_terms = set([word.lower() for word in query_str.split()])
   document_words =  set([word.lower() for word in string.split()])
   if match_op == "or":
-    return query & document_words
+    for query_term in query_terms:
+      for word in document_words:
+        if query_term in word:
+          return True
+    return False
   else:
-    return query.issubset(document_words)
+    for query_term in query_terms:
+      found = False
+      for word in document_words:
+        if query_term in word:
+          found = True
+      if not found:
+        return found
+    return True
+
+def log_query(dir, user, topic, search_str, count):
+  if not dir:
+    return
+  current_date_iso = datetime.utcnow().isoformat() + 'Z'
+  with safe_open(os.path.join(dir, 'grepg.log'), 'a') as fp:
+    fp.write("{0}\t{1}\t{2}\t{3}\t{4}\n".format(current_date_iso, user, topic, search_str, count))
