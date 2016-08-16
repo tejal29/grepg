@@ -52,7 +52,7 @@ def since_time_in_words(time_in_seconds):
     return '{0} second(s)'.format(detla.second)
 
 
-def match(query_str, string, match_op):
+def match(query_str, string, match_op="or"):
   query_terms = set([word.lower() for word in query_str.split()])
   document_words =  set([word.lower() for word in string.split()])
   if match_op == "or":
