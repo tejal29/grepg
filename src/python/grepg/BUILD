@@ -10,7 +10,7 @@ python_binary(name='bin',
 python_library(name='grepg-packaged',
   provides=setup_py(
     name='grepg',
-    version='0.0.9',
+    version='0.1.0',
     description='A python client for GrepPage',
     long_description='''grepg (pronounced Grep G) is a python client for GrepPage (www.greppage.com).
 It allows you to access your cheat sheets without leaving the terminal.''',

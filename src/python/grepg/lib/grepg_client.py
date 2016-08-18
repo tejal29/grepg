@@ -45,7 +45,7 @@ class GrepgClient(object):
     (_, topics) = self._get_user_topics()
     topic_cheats = {}
     for topic in topics.values():
-      if match(topic.topic_name, self.topic, self.match_op):
+      if match(topic.topic_name, self.topic):
         with CheatSheetsCache(self.ttl) as cs:
           if self.force or topic.is_expired(self.ttl) or not topic.cheats:
             log.debug('Fetching user topic cheats from server')
